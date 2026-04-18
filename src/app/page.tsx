@@ -4,6 +4,7 @@ import MetricCards from '@/components/MetricCards';
 import BarChart from '@/components/BarChart';
 import SearchFilter from '@/components/SearchFilter';
 import LogFeed from '@/components/LogFeed';
+import NavTabs from '@/components/NavTabs';
 
 export const revalidate = 60;
 
@@ -91,15 +92,18 @@ export default async function DashboardPage({
       <header
         style={{
           background: '#4F46E5',
-          padding: '1rem 1.5rem',
+          padding: '1rem 1.5rem 0',
           color: '#fff',
-          marginBottom: '2rem',
+          marginBottom: '1.5rem',
         }}
       >
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <h1 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
             NY Footy Referee Bot — Operations Dashboard
           </h1>
+          <Suspense fallback={null}>
+            <NavTabs />
+          </Suspense>
         </div>
       </header>
 
