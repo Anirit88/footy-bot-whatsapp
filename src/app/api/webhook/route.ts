@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const maxDuration = 60;
+
 import { getQueryEmbedding } from '@/lib/voyage';
 import { askClaude } from '@/lib/anthropic';
 import { sendWhatsAppReply } from '@/lib/twilio';
