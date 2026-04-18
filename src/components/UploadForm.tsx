@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { getSupabaseBrowser } from '@/lib/supabase-browser';
 
 interface DocStat {
   source: string;
@@ -30,21 +29,14 @@ export default function UploadForm() {
 
   async function fetchDocs() {
     setLoading(true);
-    const supabase = getSupabaseBrowser();
-    const { data } = await supabase.from('chunks').select('source, created_at');
-    if (data) {
-      const map = new Map<string, { chunks: number; ingested_at: string }>();
-      for (const row of data as { source: string; created_at: string }[]) {
-        const existing = map.get(row.source);
-        map.set(row.source, {
-          chunks: (existing?.chunks ?? 0) + 1,
-          ingested_at: existing?.ingested_at ?? row.created_at,
-        });
+    try {
+      const res = await fetch('/api/documents');
+      if (res.ok) {
+        const json = await res.json();
+        setDocs(json.docs ?? []);
       }
-      const sorted = [...map.entries()]
-        .map(([source, meta]) => ({ source, ...meta }))
-        .sort((a, b) => b.ingested_at.localeCompare(a.ingested_at));
-      setDocs(sorted);
+    } catch {
+      // silently fail — table may not exist yet
     }
     setLoading(false);
   }
