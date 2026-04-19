@@ -64,8 +64,13 @@ export default function UploadForm() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? 'Upload failed');
 
-      setState('success');
-      setMessage(`✓ ${json.filename} — ${json.chunksIngested} chunks ingested`);
+      if (json.chunksIngested === 0) {
+        setState('error');
+        setMessage(`⚠ ${json.filename} stored but 0 chunks extracted. ${json.message ?? 'The PDF may be scanned/image-only with no text layer.'}`);
+      } else {
+        setState('success');
+        setMessage(`✓ ${json.filename} — ${json.chunksIngested} chunks ingested`);
+      }
       if (inputRef.current) inputRef.current.value = '';
       await fetchDocs();
     } catch (err) {
@@ -210,15 +215,15 @@ export default function UploadForm() {
                   <td style={{ padding: '0.875rem 1rem', textAlign: 'right' }}>
                     <span
                       style={{
-                        background: '#EEF2FF',
-                        color: '#4F46E5',
+                        background: doc.chunks === 0 ? '#FEF3C7' : '#EEF2FF',
+                        color: doc.chunks === 0 ? '#92400E' : '#4F46E5',
                         borderRadius: '9999px',
                         padding: '2px 10px',
                         fontSize: '0.78rem',
                         fontWeight: 600,
                       }}
                     >
-                      {doc.chunks.toLocaleString()} chunks
+                      {doc.chunks === 0 ? 'No text extracted' : `${doc.chunks.toLocaleString()} chunks`}
                     </span>
                   </td>
                   <td style={{ padding: '0.875rem 1.5rem', textAlign: 'right', color: '#6B7280', whiteSpace: 'nowrap' }}>
