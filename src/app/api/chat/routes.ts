@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { askClaude } from '@/lib/anthropic';
+import { askClaude } from '@/lib/anthropic'; 
 import { getSupabaseServer } from '@/lib/supabase-server';
 
 export const maxDuration = 60;
