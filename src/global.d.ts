@@ -9,7 +9,7 @@ declare class Buffer extends Uint8Array {
 }
 
 declare namespace NodeJS {
-  interface ProcessEnv {
+  interface ProcessEnv { 
     [key: string]: string | undefined;
   }
   interface Process {
